@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.myapplication.R;
@@ -20,7 +21,7 @@ import com.example.myapplication.R;
 public class BlankFragment extends Fragment implements SensorEventListener {
     private SensorManager sensorManager;
     private Sensor sensor;
-    TextView x, y, z;
+    ProgressBar xProgressBar, yProgressBar, zProgressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -28,9 +29,9 @@ public class BlankFragment extends Fragment implements SensorEventListener {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_new, container, false);
 
-        x = view.findViewById(R.id.x);
-        y = view.findViewById(R.id.y);
-        z = view.findViewById(R.id.z);
+        xProgressBar = view.findViewById(R.id.xProgressBar);
+        yProgressBar = view.findViewById(R.id.yProgressBar);
+        zProgressBar = view.findViewById(R.id.zProgressBar);
 
         // Seleccionem el tipus de sensor (veure doc oficial)
         sensorManager = (SensorManager) requireActivity().getSystemService(Context.SENSOR_SERVICE);
@@ -57,9 +58,15 @@ public class BlankFragment extends Fragment implements SensorEventListener {
         float yAcc = sensorEvent.values[1];
         float zAcc = sensorEvent.values[2];
 
-        x.setText("X: " + Float.toString(xAcc));
-        y.setText("Y: " + Float.toString(yAcc));
-        z.setText("Z: " + Float.toString(zAcc));
+        int progressBarMaxValue = 100;
+        int xProgress = (int) ((xAcc / SensorManager.GRAVITY_EARTH) * progressBarMaxValue);
+        int yProgress = (int) ((yAcc / SensorManager.GRAVITY_EARTH) * progressBarMaxValue);
+        int zProgress = (int) ((zAcc / SensorManager.GRAVITY_EARTH) * progressBarMaxValue);
+
+        xProgressBar.setProgress(xProgress);
+        yProgressBar.setProgress(yProgress);
+        zProgressBar.setProgress(zProgress);
+
     }
 
     @Override
